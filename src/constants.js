@@ -1,1 +1,1 @@
-export const BASE_API_URL="http://localhost:3000/api"
+export const BASE_API_URL="https://user-posts-seven.vercel.app/api"
