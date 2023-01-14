@@ -7,23 +7,20 @@ import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import profile from "../image/SeekPng.com_profile-icon-png_9665493.png";
 import Card from "react-bootstrap/Card";
-import { BASE_API_URL } from "../constants";
+import { BASE_API_URL,config } from "../constants";
 
 const Post = ({ post,users }) => {
   const [show, setShow] = useState(false);
   const [updated, setUpdated] = useState("");
   const [comment, setComment] = useState(post.comments);
   const [like, setLike] = useState(post.liked);
-  console.log('>>>>>>.',);
   const isLiked = async (id, liked) => {
     await fetch(`${BASE_API_URL}/post/${id}`, {
       method: "PATCH",
       body: JSON.stringify({
         liked: liked,
       }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
+      headers:config.headers,
     }).then((response) => response.json());
     post.liked = liked;
     setLike(liked);
@@ -40,9 +37,7 @@ const Post = ({ post,users }) => {
       body: JSON.stringify({
         comments: content,
       }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
+      headers:config.headers,
     }).then((response) => response.json());
     setComment(postComments.data.comments);
     setUpdated("");

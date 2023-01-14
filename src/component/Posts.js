@@ -1,6 +1,6 @@
 import Button from "react-bootstrap/Button";
 import profile from "../image/SeekPng.com_profile-icon-png_9665493.png";
-import {BASE_API_URL} from "../constants";
+import { BASE_API_URL,config } from "../constants";
 import Card from "react-bootstrap/Card";
 import { IoMdPhotos } from "react-icons/io";
 
@@ -15,11 +15,15 @@ function Posts() {
   // Function to collect data
   const getApiData = async () => {
     const response = await fetch(
-      `${BASE_API_URL}/user/63bdb3a31e10ed9224dd4438`
+      `${BASE_API_URL}/user/63bdb3a31e10ed9224dd4438`,{
+        headers:config.headers,
+      }
     ).then((response) => response.json());
     setUsers(response.data);
     const posts = await fetch(
-      `${BASE_API_URL}/post/63bdb3a31e10ed9224dd4438/posts`
+      `${BASE_API_URL}/post/63bdb3a31e10ed9224dd4438/posts`,{
+        headers:config.headers,
+      }
     ).then((response) => response.json());
     // update the state
     setItem(posts.data.posts);
@@ -41,8 +45,8 @@ function Posts() {
           title: inputData,
           userId: users._id,
         }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
+        headers:{
+          headers:config.headers,
         },
       }).then((response) => response.json());
       setItem([response.data, ...Item]);
