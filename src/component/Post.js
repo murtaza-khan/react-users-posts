@@ -7,7 +7,7 @@ import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import profile from "../image/SeekPng.com_profile-icon-png_9665493.png";
 import Card from "react-bootstrap/Card";
-import { BASE_API_URL,config } from "../constants";
+import { BASE_API_URL } from "../constants";
 
 const Post = ({ post,users }) => {
   const [show, setShow] = useState(false);
@@ -19,8 +19,7 @@ const Post = ({ post,users }) => {
       method: "PATCH",
       body: JSON.stringify({
         liked: liked,
-      }),
-      headers:config.headers,
+      })
     }).then((response) => response.json());
     post.liked = liked;
     setLike(liked);
@@ -36,15 +35,14 @@ const Post = ({ post,users }) => {
       method: "PATCH",
       body: JSON.stringify({
         comments: content,
-      }),
-      headers:config.headers,
+      })
     }).then((response) => response.json());
     setComment(postComments.data.comments);
     setUpdated("");
   };
 
   return (
-    <Card className="mt-5 center col-lg-6 col-md-10 col-sm-12 col-xs-12 center">
+    <Card className=" mt-5 center col-lg-6 col-md-10 col-sm-12 col-xs-12">
       <div className="upper-div " style={{ margin: "3%" }}>
         <Card.Img
           variant="top"

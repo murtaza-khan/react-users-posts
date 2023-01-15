@@ -1,6 +1,6 @@
 import Button from "react-bootstrap/Button";
 import profile from "../image/SeekPng.com_profile-icon-png_9665493.png";
-import { BASE_API_URL,config } from "../constants";
+import { BASE_API_URL } from "../constants";
 import Card from "react-bootstrap/Card";
 import { IoMdPhotos } from "react-icons/io";
 
@@ -15,14 +15,16 @@ function Posts() {
   // Function to collect data
   const getApiData = async () => {
     const response = await fetch(
-      `${BASE_API_URL}/user/63bdb3a31e10ed9224dd4438`,{
-        headers:config.headers,
+      `${BASE_API_URL}/user/63bdb3a31e10ed9224dd4438`,
+      {
+        method: "GET",
       }
     ).then((response) => response.json());
     setUsers(response.data);
     const posts = await fetch(
-      `${BASE_API_URL}/post/63bdb3a31e10ed9224dd4438/posts`,{
-        headers:config.headers,
+      `${BASE_API_URL}/post/63bdb3a31e10ed9224dd4438/posts`,
+      {
+        method: "GET",
       }
     ).then((response) => response.json());
     // update the state
@@ -38,17 +40,16 @@ function Posts() {
   const addItem = async () => {
     if (!inputData) {
     } else {
-      console.log("UUU", users._id);
+      console.log("UUU", users._id,inputData);
       const response = await fetch(`${BASE_API_URL}/post`, {
         method: "POST",
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           title: inputData,
           userId: users._id,
         }),
-        headers:{
-          headers:config.headers,
-        },
-      }).then((response) => response.json());
+      }).then((response) => response.json()).catch((e)=>{console.log(e);});
+      console.log(">>>>>????????????>>", response);
       setItem([response.data, ...Item]);
       setInputData("");
     }
@@ -56,7 +57,7 @@ function Posts() {
 
   return (
     <div style={{ backgroundColor: "rgb(240, 231, 231)", minHeight: "100vh" }}>
-      <div style={{ padding: "5rem" }}>
+      <div className="container">
         {/* ####################---Div-A-----###################################################################### */}
         <Card
           className="center col-lg-6 col-md-10 col-sm-12 col-xs-12"
@@ -96,7 +97,13 @@ function Posts() {
           </div>
         </Card>
         {Item.map((currentElement, index) => {
-          return <Post post={currentElement} key={currentElement._id} users={users}/>;
+          return (
+            <Post
+              post={currentElement}
+              key={currentElement._id}
+              users={users}
+            />
+          );
         })}
       </div>
     </div>
