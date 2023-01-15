@@ -36,9 +36,9 @@ function Posts() {
 
   return (
     <div style={{ backgroundColor: "rgb(240, 231, 231)", minHeight: "100vh" }}>
-      <div className="container">
+      <div className="pt-5 container">
         <Card
-          className="mt-5 center col-lg-6 col-md-10 col-sm-12 col-xs-12"
+          className="center col-lg-6 col-md-10 col-sm-12 col-xs-12"
           style={{ borderRadius: "10px" }}
         >
           <div className="upper-div" style={{ margin: "3%" }}>
