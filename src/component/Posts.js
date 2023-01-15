@@ -1,11 +1,11 @@
 import Button from "react-bootstrap/Button";
 import profile from "../image/SeekPng.com_profile-icon-png_9665493.png";
-import { BASE_API_URL } from "../constants";
 import Card from "react-bootstrap/Card";
 import { IoMdPhotos } from "react-icons/io";
 
 import { useState, useEffect } from "react";
 import Post from "./Post";
+import { createPost, getPosts, getUser } from "../utils";
 
 function Posts() {
   const [inputData, setInputData] = useState("");
@@ -13,43 +13,22 @@ function Posts() {
   const [users, setUsers] = useState();
   // ################################### Api##################
   // Function to collect data
-  const getApiData = async () => {
-    const response = await fetch(
-      `${BASE_API_URL}/user/63bdb3a31e10ed9224dd4438`,
-      {
-        method: "GET",
-      }
-    ).then((response) => response.json());
+
+  useEffect(async () => {
+    const response = await getUser();
+    const posts = await getPosts();
     setUsers(response.data);
-    const posts = await fetch(
-      `${BASE_API_URL}/post/63bdb3a31e10ed9224dd4438/posts`,
-      {
-        method: "GET",
-      }
-    ).then((response) => response.json());
-    // update the state
     setItem(posts.data.posts);
-  };
-  useEffect(() => {
-    console.log("info");
-    getApiData();
   }, []);
   const onChange = (e) => {
     setInputData(e.target.value);
   };
   const addItem = async () => {
-    if (!inputData) {
-    } else {
-      console.log("UUU", users._id,inputData);
-      const response = await fetch(`${BASE_API_URL}/post`, {
-        method: "POST",
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title: inputData,
-          userId: users._id,
-        }),
-      }).then((response) => response.json()).catch((e)=>{console.log(e);});
-      console.log(">>>>>????????????>>", response);
+    if (inputData) {
+      const response = await createPost({
+        title: inputData,
+        userId: users._id,
+      });
       setItem([response.data, ...Item]);
       setInputData("");
     }
@@ -58,7 +37,6 @@ function Posts() {
   return (
     <div style={{ backgroundColor: "rgb(240, 231, 231)", minHeight: "100vh" }}>
       <div className="container">
-        {/* ####################---Div-A-----###################################################################### */}
         <Card
           className="center col-lg-6 col-md-10 col-sm-12 col-xs-12"
           style={{ borderRadius: "10px" }}

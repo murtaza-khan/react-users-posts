@@ -7,22 +7,17 @@ import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import profile from "../image/SeekPng.com_profile-icon-png_9665493.png";
 import Card from "react-bootstrap/Card";
-import { BASE_API_URL } from "../constants";
+import { createComment, addLiked } from "../utils";
 
-const Post = ({ post,users }) => {
+const Post = ({ post, users }) => {
   const [show, setShow] = useState(false);
   const [updated, setUpdated] = useState("");
   const [comment, setComment] = useState(post.comments);
   const [like, setLike] = useState(post.liked);
   const isLiked = async (id, liked) => {
-    await fetch(`${BASE_API_URL}/post/${id}`, {
-      method: "PATCH",
-      body: JSON.stringify({
-        liked: liked,
-      })
-    }).then((response) => response.json());
-    post.liked = liked;
-    setLike(liked);
+    const response = await addLiked(id, liked);
+    post.liked = response.data.liked;
+    setLike(response.data.liked);
   };
   const secONChange = (e, id) => {
     const { value } = e.target;
@@ -30,13 +25,8 @@ const Post = ({ post,users }) => {
   };
   const addComment = async (id, newComment) => {
     if (newComment === "") return true;
-    let content = [...comment, newComment];
-    const postComments = await fetch(`${BASE_API_URL}/post/${id}`, {
-      method: "PATCH",
-      body: JSON.stringify({
-        comments: content,
-      })
-    }).then((response) => response.json());
+    let content = [newComment, ...comment];
+    const postComments = await createComment(id, content);
     setComment(postComments.data.comments);
     setUpdated("");
   };
@@ -50,7 +40,9 @@ const Post = ({ post,users }) => {
           style={{ width: "4rem", height: "4rem", float: "left" }}
         />
         <div style={{ float: "left", marginLeft: "3%" }}>
-          <h5 style={{ marginBottom: "0" }}>{`${users.firstName} ${users.lastName}`}</h5>
+          <h5
+            style={{ marginBottom: "0" }}
+          >{`${users.firstName} ${users.lastName}`}</h5>
           <a style={{ textDecoration: "none", fontWeight: "bold" }} href="/">
             {" "}
             <ImLocation /> OH, USA
